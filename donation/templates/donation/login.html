@@ -1,0 +1,172 @@
+{% extends 'donation/layout.html' %}
+{% load static %}
+
+{% block title %}Login - Food Donation{% endblock %}
+
+{% block content %}
+<div class="custom-login-container mt-4">
+    <div class="login-header text-center mb-4">
+        <h1 class="display-4">Join the Food Waste Revolution</h1>
+        <p class="lead">Connect, donate, and make a difference in your community</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <!-- Individual Login -->
+        <div class="col-md-5">
+            <div class="card shadow-sm mb-4 donor-login-card">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <span class="login-icon donor-icon">
+                            <i class="bi bi-person-circle"></i>
+                        </span>
+                        <h2>Individual Login</h2>
+                        <p class="text-muted">For donors & volunteers</p>
+                    </div>
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">Sign In</button>
+                        </div>
+                    </form>
+                    <div class="text-center mt-4">
+                        <p>Don't have an account? <a href="{% url 'register_user' %}" class="text-success">Sign Up</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NGO Login -->
+        <div class="col-md-5">
+            <div class="card shadow-sm mb-4 ngo-login-card">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <span class="login-icon ngo-icon">
+                            <i class="bi bi-building"></i>
+                        </span>
+                        <h2>NGO Login</h2>
+                        <p class="text-muted">For organizations & food banks</p>
+                    </div>
+                    <form method="post" action="{% url 'ngo_login' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="ngo_username" class="form-label">Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input type="text" class="form-control" id="ngo_username" name="username" placeholder="Enter your NGO username" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ngo_password" class="form-label">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input type="password" class="form-control" id="ngo_password" name="password" placeholder="Enter your password" required>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
+                        </div>
+                    </form>
+                    <div class="text-center mt-4">
+                        <p>Need to register your NGO? <a href="{% url 'register_ngo' %}" class="text-primary">Register Here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Benefits Section -->
+    <div class="card shadow-sm mt-4 mb-4">
+        <div class="card-body p-4">
+            <h3 class="text-center mb-4">Why Join Our Platform?</h3>
+            <div class="row text-center">
+                <div class="col-md-4 mb-3">
+                    <div class="p-3 rounded bg-light">
+                        <i class="bi bi-heart-fill text-success fs-1 mb-3"></i>
+                        <h4>Make an Impact</h4>
+                        <p>Help reduce food waste and feed those in need</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="p-3 rounded bg-light">
+                        <i class="bi bi-people-fill text-warning fs-1 mb-3"></i>
+                        <h4>Build Community</h4>
+                        <p>Connect with like-minded individuals and organizations</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="p-3 rounded bg-light">
+                        <i class="bi bi-leaf-fill text-primary fs-1 mb-3"></i>
+                        <h4>Go Green</h4>
+                        <p>Contribute to sustainability and environmental protection</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Add Bootstrap Icons */
+    @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css");
+    
+    .custom-login-container {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+    
+    .login-icon {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        margin-bottom: 1rem;
+        font-size: 2rem;
+    }
+    
+    .donor-icon {
+        background-color: rgba(40, 167, 69, 0.1);
+        color: #28a745;
+    }
+    
+    .ngo-icon {
+        background-color: rgba(13, 110, 253, 0.1);
+        color: #0d6efd;
+    }
+    
+    .donor-login-card {
+        border-top: 4px solid #28a745;
+        transition: transform 0.3s ease;
+    }
+    
+    .ngo-login-card {
+        border-top: 4px solid #0d6efd;
+        transition: transform 0.3s ease;
+    }
+    
+    .donor-login-card:hover, .ngo-login-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    @media (max-width: 767px) {
+        .row.justify-content-center > .col-md-5 {
+            width: 90%;
+        }
+    }
+</style>
+{% endblock %}

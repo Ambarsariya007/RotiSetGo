@@ -1,0 +1,280 @@
+{% extends 'donation/layout.html' %}
+{% block title %}Create New Food Listing{% endblock %}
+{% load widget_tweaks %}
+
+{% block page_header %}
+<div class="text-center mb-5">
+    <h1 class="display-5 fw-bold">Create New Food Listing</h1>
+    <p class="lead text-muted">Share your surplus food with those who need it most</p>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-3 mb-5">
+                <div class="card-header bg-white p-4 border-bottom">
+                    <div class="d-flex align-items-center">
+                        <div class="feature-icon me-3">
+                            <i class="bi bi-plus-circle text-success fs-2"></i>
+                        </div>
+                        <div>
+                            <h3 class="mb-0">Food Donation Details</h3>
+                            <p class="text-muted mb-0">Fill out the information below to create your listing</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data" class="create-listing-form">
+                        {% csrf_token %}
+                        <div class="form-sections">
+                            
+                            <!-- Food Information Section -->
+                            <div class="form-section mb-4">
+                                <h4 class="section-title mb-3">Food Information</h4>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.food_type.id_for_label }}" class="form-label">Food Type</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-tag"></i></span>
+                                        {{ form.food_type|add_class:"form-select" }}
+                                    </div>
+                                    {% if form.food_type.errors %}
+                                    <div class="text-danger mt-1">{{ form.food_type.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                               
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.quantity.id_for_label }}" class="form-label">Quantity</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-boxes"></i></span>
+                                        {{ form.quantity|add_class:"form-control" }}
+                                    </div>
+                                    <div class="form-text">Specify amount (e.g., "5 loaves", "3 kg", "12 portions")</div>
+                                    {% if form.quantity.errors %}
+                                    <div class="text-danger mt-1">{{ form.quantity.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+                                        {{ form.description|add_class:"form-control" }}
+                                    </div>
+                                    <div class="form-text">Provide details about the food items</div>
+                                    {% if form.description.errors %}
+                                    <div class="text-danger mt-1">{{ form.description.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Date and Time Section -->
+                            <div class="form-section mb-4">
+                                <h4 class="section-title mb-3">Date & Time Information</h4>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.expiry_date.id_for_label }}" class="form-label">Expiry Date</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+                                        {{ form.expiry_date|add_class:"form-control" }}
+                                    </div>
+                                    {% if form.expiry_date.errors %}
+                                    <div class="text-danger mt-1">{{ form.expiry_date.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.pickup_time.id_for_label }}" class="form-label">Pickup Time</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-clock"></i></span>
+                                        {{ form.pickup_time|add_class:"form-control" }}
+                                    </div>
+                                    {% if form.pickup_time.errors %}
+                                    <div class="text-danger mt-1">{{ form.pickup_time.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Location Section -->
+                            <div class="form-section mb-4">
+                                <h4 class="section-title mb-3">Pickup Location</h4>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.pickup_location.id_for_label }}" class="form-label">Address</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                                        {{ form.pickup_location|add_class:"form-control" }}
+                                    </div>
+                                    {% if form.pickup_location.errors %}
+                                    <div class="text-danger mt-1">{{ form.pickup_location.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                    
+                            
+                            <!-- Image Upload Section -->
+                            <div class="form-section mb-4">
+                                <h4 class="section-title mb-3">Food Image</h4>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ form.image.id_for_label }}" class="form-label">Upload Image (Optional)</label>
+                                    <div class="image-upload-container p-3 bg-light rounded text-center">
+                                        <div class="upload-icon mb-2">
+                                            <i class="bi bi-cloud-arrow-up fs-1 text-muted"></i>
+                                        </div>
+                                        {{ form.image|add_class:"form-control" }}
+                                        <div class="form-text mt-2">Upload a clear image of the food items (JPEG, PNG, max 5MB)</div>
+                                    </div>
+                                    {% if form.image.errors %}
+                                    <div class="text-danger mt-1">{{ form.image.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-section mb-2">
+                            <div class="alert alert-info d-flex align-items-center" role="alert">
+                                <i class="bi bi-info-circle-fill me-2"></i>
+                                <div>
+                                    By submitting this listing, you confirm that the food items are safe for consumption and properly stored.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary me-md-2">Cancel</a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-plus-circle me-2"></i>Submit Listing
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Guidelines Card -->
+            <div class="card shadow-sm border-0 rounded-3 mb-5">
+                <div class="card-body p-4">
+                    <h4 class="mb-3"><i class="bi bi-lightbulb text-warning me-2"></i>Food Donation Guidelines</h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item border-0 ps-0">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            Ensure all food items are still safe for consumption
+                        </li>
+                        <li class="list-group-item border-0 ps-0">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            Package food properly to maintain quality
+                        </li>
+                        <li class="list-group-item border-0 ps-0">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            Be accurate about expiration dates and quantities
+                        </li>
+                        <li class="list-group-item border-0 ps-0">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            Include all relevant pickup information
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .section-title {
+        position: relative;
+        padding-bottom: 0.5rem;
+        font-weight: 600;
+    }
+
+    .section-title:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 40px;
+        height: 2px;
+        background-color: #28a745;
+    }
+
+    .form-section {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .form-section:last-of-type {
+        border-bottom: none;
+    }
+
+    .form-label {
+        font-weight: 500;
+    }
+
+    .input-group-text {
+        background-color: #f8f9fa;
+    }
+
+    .form-control, .form-select {
+        border-radius: 0.375rem;
+        padding: 0.625rem 0.75rem;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+    }
+
+    .feature-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: rgba(40, 167, 69, 0.1);
+    }
+
+    .image-upload-container {
+        border: 2px dashed #dee2e6;
+        transition: all 0.3s ease;
+    }
+
+    .image-upload-container:hover {
+        border-color: #28a745;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const fileInput = document.querySelector('input[type="file"]');
+        if (fileInput) {
+            fileInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const allowedTypes = ['image/jpeg', 'image/png'];
+                    if (!allowedTypes.includes(file.type)) {
+                        alert("Only JPEG and PNG formats are allowed.");
+                        this.value = '';
+                    } else if (file.size > 5 * 1024 * 1024) {
+                        alert("Image size should not exceed 5MB.");
+                        this.value = '';
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

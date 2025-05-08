@@ -1,0 +1,193 @@
+{% extends 'donation/layout.html' %} 
+{% block title %}Food Listings{% endblock %}
+
+{% block page_header %}
+<div class="text-center mb-5">
+    <h1 class="display-5 fw-bold">Available Food Donations</h1>
+    <p class="lead text-muted">Browse food items available for pickup and distribution</p>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Available Listings</h2>
+        <div class="filter-controls">
+            <select class="form-select form-select-sm" aria-label="Filter food type">
+                <option selected>All Food Types</option>
+                <option value="1">Cooked Food</option>
+                <option value="2">Fresh Produce</option>
+                <option value="3">Canned Goods</option>
+                <option value="4">Bakery Items</option>
+                <option value="5">Beverages</option>
+            </select>
+        </div>
+    </div>
+
+    {% if listings %}
+    <div class="row g-4">
+        {% for listing in listings %}
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 listing-card shadow-sm">
+                {% if listing.image %}
+                <div class="card-img-container">
+                    <img src="{{ listing.image.url }}" 
+                         class="card-img-top" 
+                         alt="{{ listing.get_food_type_display }}"
+                         style="width: 100%; height: 200px; object-fit: cover;">
+                    <div class="expiry-badge">
+                        Expires: {{ listing.expiry_date|date:"M d" }}
+                    </div>
+                </div>
+                {% else %}
+                <div class="card-img-container no-image">
+                    <div class="placeholder-img">
+                        <i class="bi bi-card-image text-muted" style="font-size: 3rem;"></i>
+                    </div>
+                    <div class="expiry-badge">
+                        Expires: {{ listing.expiry_date|date:"M d" }}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <div class="card-body">
+                    <div class="food-type-badge">{{ listing.get_food_type_display }}</div>
+                    <h5 class="card-title mt-2">{{ listing.title|default:listing.get_food_type_display }}</h5>
+                    <div class="card-text">
+                        <div class="listing-detail mb-2">
+                            <i class="bi bi-box-seam text-success"></i>
+                            <span>{{ listing.quantity }} available</span>
+                        </div>
+                        <div class="listing-detail mb-2">
+                            <i class="bi bi-geo-alt text-danger"></i>
+                            <span>{{ listing.pickup_location }}</span>
+                        </div>
+                        <div class="listing-detail">
+                            <i class="bi bi-clock text-primary"></i>
+                            <span>Pickup at {{ listing.pickup_time|time:"g:i A" }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-top-0">
+                    <div class="d-grid">
+                        <a href="{% url 'food_detail' listing.id %}" class="btn btn-outline-success">
+                            <i class="bi bi-info-circle me-1"></i> View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination -->
+    <nav aria-label="Listing pagination" class="my-5">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
+    
+    {% else %}
+    <div class="empty-state text-center py-5">
+        <div class="empty-state-icon mb-4">
+            <i class="bi bi-basket text-muted" style="font-size: 5rem;"></i>
+        </div>
+        <h3>No Food Listings Available</h3>
+        <p class="text-muted mb-4">There are currently no food items available for donation.</p>
+        <p>Check back soon or subscribe to notifications to be alerted when new items are posted.</p>
+        <button class="btn btn-outline-primary">
+            <i class="bi bi-bell me-1"></i> Get Notifications
+        </button>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    /* Food Listings Specific Styles */
+    .listing-card {
+        border: none;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .listing-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .card-img-container {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+    }
+    
+    .card-img-top {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    
+    .listing-card:hover .card-img-top {
+        transform: scale(1.05);
+    }
+    
+    .placeholder-img {
+        height: 200px;
+        background-color: #f8f9fa;
+    }
+    
+    .food-type-badge {
+        display: inline-block;
+        background-color: #e9f7ef;
+        color: #28a745;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        text-transform: uppercase;
+    }
+    
+    .expiry-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    
+    .expiry-warning {
+        background-color: rgba(255, 193, 7, 0.9);
+        color: #212529;
+    }
+    
+    .listing-detail {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+    }
+    
+    .filter-controls {
+        width: 180px;
+    }
+    
+    .empty-state {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 3rem;
+    }
+</style>
+{% endblock %}

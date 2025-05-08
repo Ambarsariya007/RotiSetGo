@@ -1,0 +1,211 @@
+{% extends 'donation/layout.html' %}
+{% block title %}{{ listing.get_food_type_display }} Details{% endblock %}
+
+{% block page_header %}
+<div class="text-center mb-5">
+    <h1 class="display-5 fw-bold">{{ listing.get_food_type_display }}</h1>
+    {% if listing.title %}
+    <p class="lead text-muted">{{ listing.title }}</p>
+    {% else %}
+    <p class="lead text-muted">Food donation details</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-3 mb-4">
+                <div class="card-header bg-white p-4 border-bottom">
+                    <div class="d-flex align-items-center">
+                        <div class="feature-icon me-3">
+                            <i class="bi bi-basket2 text-success fs-2"></i>
+                        </div>
+                        <div>
+                            <h3 class="mb-0">Food Item Details</h3>
+                            <p class="text-muted mb-0">Available for pickup</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-body p-4">
+                    {% if listing.image %}
+                    <div class="text-center mb-4">
+                        <img src="{{ listing.image.url }}" class="img-fluid rounded shadow-sm" alt="Food Image" style="max-height: 300px;">
+                    </div>
+                    {% endif %}
+                    
+                    <div class="form-sections">
+                        <!-- Food Information Section -->
+                        <div class="form-section mb-4">
+                            <h4 class="section-title mb-3">Food Information</h4>
+                            
+                            <div class="mb-3 row">
+                                <label class="col-sm-4 col-form-label fw-bold">
+                                    <i class="bi bi-tag me-2 text-muted"></i>Food Type:
+                                </label>
+                                <div class="col-sm-8 col-form-label">
+                                    {{ listing.get_food_type_display }}
+                                </div>
+                            </div>
+                            
+                            {% if listing.title %}
+                            <div class="mb-3 row">
+                                <label class="col-sm-4 col-form-label fw-bold">
+                                    <i class="bi bi-type me-2 text-muted"></i>Title:
+                                </label>
+                                <div class="col-sm-8 col-form-label">
+                                    {{ listing.title }}
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="mb-3 row">
+                                <label class="col-sm-4 col-form-label fw-bold">
+                                    <i class="bi bi-boxes me-2 text-muted"></i>Quantity:
+                                </label>
+                                <div class="col-sm-8 col-form-label">
+                                    {{ listing.quantity }}
+                                </div>
+                            </div>
+                            
+                            {% if listing.description %}
+                            <div class="mb-3 row">
+                                <label class="col-sm-4 col-form-label fw-bold">
+                                    <i class="bi bi-card-text me-2 text-muted"></i>Description:
+                                </label>
+                                <div class="col-sm-8 col-form-label">
+                                    {{ listing.description }}
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Date and Time Section -->
+                        <div class="form-section mb-4">
+                            <h4 class="section-title mb-3">Date & Time Information</h4>
+                            
+                            <div class="mb-3 row">
+                                <label class="col-sm-4 col-form-label fw-bold">
+                                    <i class="bi bi-calendar-event me-2 text-muted"></i>Expiry Date:
+                                </label>
+                                <div class="col-sm-8 col-form-label">
+                                    {{ listing.expiry_date }}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 row">
+                                <label class="col-sm-4 col-form-label fw-bold">
+                                    <i class="bi bi-clock me-2 text-muted"></i>Pickup Time:
+                                </label>
+                                <div class="col-sm-8 col-form-label">
+                                    {{ listing.pickup_time }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Location Section -->
+                        <div class="form-section mb-4">
+                            <h4 class="section-title mb-3">Pickup Location</h4>
+                            
+                            <div class="mb-3 row">
+                                <label class="col-sm-4 col-form-label fw-bold">
+                                    <i class="bi bi-geo-alt me-2 text-muted"></i>Address:
+                                </label>
+                                <div class="col-sm-8 col-form-label">
+                                    {{ listing.pickup_location }}
+                                </div>
+                            </div>
+                            
+                            {% if listing.notes %}
+                            <div class="mb-3 row">
+                                <label class="col-sm-4 col-form-label fw-bold">
+                                    <i class="bi bi-info-circle me-2 text-muted"></i>Pickup Notes:
+                                </label>
+                                <div class="col-sm-8 col-form-label">
+                                    {{ listing.notes }}
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start mt-4">
+                        <a href="{% url 'food_listing' %}" class="btn btn-outline-secondary me-md-2">
+                            <i class="bi bi-arrow-left me-2"></i>Back to Listings
+                        </a>
+                        {% if user.is_authenticated and user != listing.donor %}
+                             <a href="{% url 'request_food' listing.id %}" class="btn btn-success">
+                                  <i class="bi bi-hand-thumbs-up me-2"></i>Request This Item
+                             </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Donation Info Card -->
+            <div class="card shadow-sm border-0 rounded-3 mb-5">
+                <div class="card-body p-4">
+                    <h4 class="mb-3"><i class="bi bi-info-circle text-primary me-2"></i>About This Donation</h4>
+                    <p class="mb-3">This item was donated by {{ listing.donor.get_full_name|default:listing.donor.username }} on {{ listing.created_at|date:"F j, Y" }}.</p>
+                    <div class="alert alert-light d-flex align-items-center" role="alert">
+                        <i class="bi bi-lightbulb-fill text-warning me-2"></i>
+                        <div>
+                            <strong>Food Safety Tip:</strong> Please inspect any donated food before consumption and ensure it is still good to eat.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Food Listing Detail Styles */
+    .section-title {
+        position: relative;
+        padding-bottom: 0.5rem;
+        font-weight: 600;
+    }
+    
+    .section-title:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 40px;
+        height: 2px;
+        background-color: #28a745;
+    }
+    
+    .form-section {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .form-section:last-of-type {
+        border-bottom: none;
+    }
+    
+    .feature-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: rgba(40, 167, 69, 0.1);
+    }
+    
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+    
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+</style>
+{% endblock %}
